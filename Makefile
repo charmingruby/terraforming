@@ -1,9 +1,20 @@
-BUCKET-PLAN-FILE = "new_bucket"
+PLAN_PREFIX = plan
+BUCKET-PLAN-FILE = "${PLAN_PREFIX}_new_bucket"
 
-.PHONY: bucket-plan
-bucket-plan: # create a bucket plan to be shared when apply
+# - 
+# S3
+# -
+bucket-plan: 
 	terraform plan --out ${BUCKET-PLAN-FILE}
 
-.PHONY: bucket-apply # apply the bucket plan generated previously
-bucket-apply:
+bucket-apply: bucket-run clear-plans 
+bucket-run: 
 	terraform apply ${BUCKET-PLAN-FILE}
+
+# -
+# Helpers
+# - 
+clear-plans:
+	rm plan_*
+
+.PHONY: clear-plans bucket-plan bucket-apply bucket-run
