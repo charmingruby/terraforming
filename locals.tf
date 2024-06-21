@@ -1,13 +1,17 @@
 locals {
+  configs = flatten([
+    for filepath in fileset(path.module, "servers/*.yaml") : [
+      yamldecode(file(filepath))
+    ]
+  ])
+
   servers = flatten([
-    for filepath in fileset(path.module, "servers/*.yaml") : flatten([
-      for file in yamldecode(file(filepath)) : [
-        for server in file.servers : {
-          name = "${server.name}-${file.environment}"
-          size = server.size
-          type = server.type
-        }
-      ]
-    ])
+    for config in local.configs : [
+      for server in config.servers : {
+        name = "${server.name}-${config.environment}"
+        size = server.size
+        type = server.type
+      }
+    ]
   ])
 }
