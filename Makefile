@@ -1,15 +1,15 @@
 PLAN_PREFIX = plan
-BUCKET-PLAN-FILE = "${PLAN_PREFIX}_new_bucket"
 
 # - 
 # S3
 # -
-bucket-plan: 
-	terraform plan --out ${BUCKET-PLAN-FILE}
+plan: 
+	terraform plan --out ${PLAN_PREFIX}_$(NAME)
 
-bucket-apply: bucket-run clear-plans 
-bucket-run: 
-	terraform apply ${BUCKET-PLAN-FILE}
+apply: run clear-plans 
+run: 
+	terraform apply ${PLAN_PREFIX}_$(NAME)
+
 
 # -
 # Helpers
@@ -17,4 +17,4 @@ bucket-run:
 clear-plans:
 	rm plan_*
 
-.PHONY: clear-plans bucket-plan bucket-apply bucket-run
+.PHONY: clear-plans plan apply run import-cloud-buckets

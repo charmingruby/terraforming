@@ -1,4 +1,4 @@
 module "buckets" {
   source  = "./bucket"
-  buckets = ["documents", "backups"]
+  buckets = ["documents", "images", "users"]
 }
